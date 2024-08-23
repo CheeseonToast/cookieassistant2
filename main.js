@@ -6,7 +6,7 @@ if (typeof CCSE == 'undefined') {
 }
 
 CookieAssistant2.name = 'Cookie Assistant 2.0';
-CookieAssistant2.version = '0.8.0';
+CookieAssistant2.version = '0.8.1';
 CookieAssistant2.GameVersion = '2.052';
 
 
@@ -355,7 +355,7 @@ CookieAssistant2.launch = function () {
                                 desc: "No click buffs"
                             },
                     },
-                season: // Add Business Season
+                season:
                     {
                         0:
                             {
@@ -1313,7 +1313,7 @@ CookieAssistant2.launch = function () {
     }
 
     CookieAssistant2.CheckUpdate = async function () {
-        var res = await fetch("https://api.github.com/repos/hitsub/CookieAssistant/releases/latest") //TODO: Update to newest repo
+        var res = await fetch("https://api.github.com/CheeseonToast/cookieassistant2/releases/latest")
         var json = await res.json()
 
         if (json.tag_name == CookieAssistant2.version) {

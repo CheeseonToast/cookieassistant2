@@ -6,7 +6,7 @@ if (typeof CCSE == 'undefined') {
 }
 
 CookieAssistant2.name = 'Cookie Assistant 2.0';
-CookieAssistant2.version = '0.8.1';
+CookieAssistant2.version = '0.8.3';
 CookieAssistant2.GameVersion = '2.052';
 
 
@@ -51,7 +51,7 @@ CookieAssistant2.launch = function () {
                         autoTrainDragon: 1000,
                         autoSetSpirits: 10000,
                         autoHarvestSugarlump: 60000,
-                        autoSellBuilding: 500,
+                        autoSellBuilding: 2500,
                         autoToggleGoldenSwitch: 500,
                         autoHireBrokers: 1000,
                     },
@@ -97,6 +97,7 @@ CookieAssistant2.launch = function () {
                                 amount: [],
                                 activate_mode: [],
                                 after_mode: [],
+                                sell_mode: [],
                             },
                         wrinkler:
                             {
@@ -278,6 +279,21 @@ CookieAssistant2.launch = function () {
                         6:
                             {
                                 desc: "Have three or more buffs",
+                            },
+                    },
+                sell_buildings_mode:
+                    {
+                        0:
+                            {
+                                desc: "All",
+                            },
+                        1:
+                            {
+                                desc: "Set",
+                            },
+                        2:
+                            {
+                                desc: "Percentage",
                             },
                     },
                 sell_buildings_after: //Behavior after automatic building sale
@@ -746,7 +762,8 @@ CookieAssistant2.launch = function () {
                                 var amount = CookieAssistant2.config.particular.sell.amount[i];
                                 var activate_mode = CookieAssistant2.config.particular.sell.activate_mode[i];
                                 var after_mode = CookieAssistant2.config.particular.sell.after_mode[i];
-                                var isSold = CookieAssistant2.sellBuildings(i, target, amount, activate_mode, after_mode);
+                                var sell_mode = CookieAssistant2.config.particular.sell.sell_mode[i];
+                                var isSold = CookieAssistant2.sellBuildings(i, target, amount, activate_mode, after_mode, sell_mode);
                             }
                         },
                         CookieAssistant2.config.intervals.autoSellBuilding
@@ -831,7 +848,7 @@ CookieAssistant2.launch = function () {
         CookieAssistant2.CheckUpdate();
     }
 
-    CookieAssistant2.sellBuildings = function (index, target, amount, activate_mode, after_mode) {
+    CookieAssistant2.sellBuildings = function (index, target, amount, activate_mode, after_mode, sell_mode) {
         var objectName = Game.ObjectsById[target].name;
         var amount = parseInt(amount);
         if (amount <= 0) {
@@ -901,11 +918,24 @@ CookieAssistant2.launch = function () {
         var isMode5 = activate_mode == 5;
         var isMode6 = activate_mode == 6 && buffCount >= 3;
         if (isMode0 || isMode1 || isMode2 || isMode3 || isMode4 || isMode5 || isMode6) {
-            if (Game.Objects[objectName].amount < amount) {
-                Game.Notify(CookieAssistant2.name, "Could not sell buildings due to not enough.");
-                return false;
+            // Sell All
+            if (sell_mode == 0) {
+                amount = parseInt(Game.Objects[objectName].amount);
+                Game.Objects[objectName].sell(amount);
             }
-            Game.Objects[objectName].sell(amount);
+            // Sell Set Amount
+            if (sell_mode == 1) {
+                if (Game.Objects[objectName].amount < amount) {
+                    Game.Notify(CookieAssistant2.name, "Could not sell buildings due to not enough.");
+                    return false;
+                }
+                Game.Objects[objectName].sell(amount);
+            }
+            // Sell Percentage
+            if (sell_mode == 2) {
+                var buildings = parseInt(Game.Objects[objectName].amount);
+                Game.Objects[objectName].sell(parseInt(((amount/100)*buildings).toPrecision()));
+            }
             CookieAssistant2.config.particular.sell.isAfterSell[index] = 1;
             CookieAssistant2.isAfterSpellcast = false;
             return true;
@@ -1194,7 +1224,12 @@ CookieAssistant2.launch = function () {
             + m.InputBox("CookieAssistant2_Interval_autoSellBuilding", 40, CookieAssistant2.config.intervals.autoSellBuilding, "CookieAssistant2.ChangeInterval('autoSellBuilding', this.value)");
         str += '<div class="listing"><ol style="list-style: inside;list-style-type: decimal;">';
         for (var i_sellconf = 0; i_sellconf < CookieAssistant2.config.particular.sell.isAfterSell.length; i_sellconf++) {
-            str += '<li><label>Sell </label>'
+            str += '<li>'
+                + '<label>Mode</label>'
+                + '<a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.sell.sell_mode[' + i_sellconf + ']++; if(CookieAssistant2.config.particular.sell.sell_mode[' + i_sellconf + '] >= Object.keys(CookieAssistant2.modes.sell_buildings_mode).length) {CookieAssistant2.config.particular.sell.sell_mode[' + i_sellconf + '] = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
+                + CookieAssistant2.modes.sell_buildings_mode[CookieAssistant2.config.particular.sell.sell_mode[i_sellconf]].desc
+                + '</a>'
+                + '<label>Sell </label>'
                 + '<a class="option" ' + Game.clickStr + '="CookieAssistant2.config.particular.sell.target[' + i_sellconf + ']++; if(CookieAssistant2.config.particular.sell.target[' + i_sellconf + '] >= Object.keys(Game.Objects).length){CookieAssistant2.config.particular.sell.target[' + i_sellconf + '] = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
                 if (Game.season == 'fools'){
                     str += Game.foolObjects[Game.ObjectsById[CookieAssistant2.config.particular.sell.target[i_sellconf]].dname].name
@@ -1202,12 +1237,18 @@ CookieAssistant2.launch = function () {
                     str += Game.ObjectsById[CookieAssistant2.config.particular.sell.target[i_sellconf]].dname
                 }
                 str += '</a>'
-                + '<label> for </label>'
-                + m.InputBox("CookieAssistant2_Amount_autoSellBuilding", 40, CookieAssistant2.config.particular.sell.amount[i_sellconf], "CookieAssistant2.config.particular.sell.amount[" + i_sellconf + "] = this.value;")
-                + '<label>When </label>'
+                if (CookieAssistant2.modes.sell_buildings_mode[CookieAssistant2.config.particular.sell.sell_mode[i_sellconf]].desc == "Set") {
+                    str += '<label> For </label>'
+                    + m.InputBox("CookieAssistant2_Amount_autoSellBuilding", 40, CookieAssistant2.config.particular.sell.amount[i_sellconf], "CookieAssistant2.config.particular.sell.amount[" + i_sellconf + "] = this.value;")
+                }
+                if (CookieAssistant2.modes.sell_buildings_mode[CookieAssistant2.config.particular.sell.sell_mode[i_sellconf]].desc == "Percentage") {
+                    str += '<label> Percentage </label>'
+                    + m.InputBox("CookieAssistant2_Amount_autoSellBuilding", 40, CookieAssistant2.config.particular.sell.amount[i_sellconf], "if(this.value < 0){this.value = 0}; if(this.value > 100) {this.value = 100}; CookieAssistant2.config.particular.sell.amount[" + i_sellconf + "] = parseInt(this.value).toPrecision();")
+                }
+            str += '<label>When </label>'
                 + '<a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.sell.activate_mode[' + i_sellconf + ']++; if(CookieAssistant2.config.particular.sell.activate_mode[' + i_sellconf + '] >= Object.keys(CookieAssistant2.modes.sell_buildings).length){CookieAssistant2.config.particular.sell.activate_mode[' + i_sellconf + '] = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
                 + CookieAssistant2.modes.sell_buildings[CookieAssistant2.config.particular.sell.activate_mode[i_sellconf]].desc
-                + '</a><br />'
+                + '</a>'
                 + '<label>What to do after activation : </label>'
                 + '<a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.sell.after_mode[' + i_sellconf + ']++; if(CookieAssistant2.config.particular.sell.after_mode[' + i_sellconf + '] >= Object.keys(CookieAssistant2.modes.sell_buildings_after).length){CookieAssistant2.config.particular.sell.after_mode[' + i_sellconf + '] = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
                 + CookieAssistant2.modes.sell_buildings_after[CookieAssistant2.config.particular.sell.after_mode[i_sellconf]].desc
@@ -1290,6 +1331,7 @@ CookieAssistant2.launch = function () {
         CookieAssistant2.config.particular.sell.amount.push(0);
         CookieAssistant2.config.particular.sell.activate_mode.push(0);
         CookieAssistant2.config.particular.sell.after_mode.push(0);
+        CookieAssistant2.config.particular.sell.sell_mode.push(0);
         return;
     }
 
@@ -1299,6 +1341,7 @@ CookieAssistant2.launch = function () {
         CookieAssistant2.config.particular.sell.amount.pop();
         CookieAssistant2.config.particular.sell.activate_mode.pop();
         CookieAssistant2.config.particular.sell.after_mode.pop();
+        CookieAssistant2.config.particular.sell.sell_mode.pop();
         return;
     }
 
@@ -1313,16 +1356,16 @@ CookieAssistant2.launch = function () {
     }
 
     CookieAssistant2.CheckUpdate = async function () {
-        var res = await fetch("https://api.github.com/CheeseonToast/cookieassistant2/releases/latest")
-        var json = await res.json()
-
-        if (json.tag_name == CookieAssistant2.version) {
-            Game.Notify(CookieAssistant2.name, 'This is the latest version', "", 3)
-            return;
-        }
-
-        Game.Notify(CookieAssistant2.name, `<b style="color: #38e410"><br>There is an update!</b><br><a ${Game.clickStr}="Steam.openLink('${json.assets[0].browser_download_url}')" target="_brank">Download Here</a>`)
-        Game.UpdateMenu();
+        await fetch("https://api.github.com/repos/CheeseonToast/cookieassistant2/releases/latest").then(json => {
+            json.json().then(result => {
+                if (result.tag_name === CookieAssistant2.version) {
+                    Game.Notify(CookieAssistant2.name, `This is the latest version`, "", 3)
+                } else {
+                    Game.Notify(CookieAssistant2.name, `<b style="color: #38e410"><br>There is an update!</b><br><a ${Game.clickStr}="Steam.openLink('${result.html_url}')" target="_brank">Download Here</a>`)
+                    Game.UpdateMenu();
+                }
+            })
+        })
     }
 
     if (CCSE.ConfirmGameVersion(CookieAssistant2.name, CookieAssistant2.version, CookieAssistant2.GameVersion)) {

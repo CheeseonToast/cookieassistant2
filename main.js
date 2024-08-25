@@ -6,7 +6,7 @@ if (typeof CCSE == 'undefined') {
 }
 
 CookieAssistant2.name = 'Cookie Assistant 2.0';
-CookieAssistant2.version = '0.9.0';
+CookieAssistant2.version = '0.9.1';
 CookieAssistant2.GameVersion = '2.052';
 
 
@@ -1217,6 +1217,12 @@ CookieAssistant2.launch = function () {
         str += '</div>';
         str += "<br>"
 
+        str += m.Header('Special Assists');
+        //ChocolateEgg
+        str += '<div class="listing">' + m.ToggleButton(CookieAssistant2.config.flags, 'autoChocolateEgg', 'CookieAssistant2_autoChocolateEgg', 'Auto Buy ' + loc("[Upgrade name 227]Chocolate egg") + ' ON', 'AutoToggle ' + loc("[Upgrade name 227]Chocolate egg") + ' OFF', "CookieAssistant2.Toggle")
+            + '</div>';
+        str += "<br>"
+
         str += m.Header('Godzamok Assistant');
         //building automatic sale
         str += '<div class="listing">' + m.ToggleButton(CookieAssistant2.config.flags, 'autoSellBuilding', 'CookieAssistant2_autoSellBuilding', 'AutoSell Buildings ON', 'AutoSell Buildings OFF', "CookieAssistant2.Toggle");
@@ -1235,7 +1241,7 @@ CookieAssistant2.launch = function () {
                 + '<a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.sell.sell_mode[' + i_sellconf + ']++; if(CookieAssistant2.config.particular.sell.sell_mode[' + i_sellconf + '] >= Object.keys(CookieAssistant2.modes.sell_buildings_mode).length) {CookieAssistant2.config.particular.sell.sell_mode[' + i_sellconf + '] = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
                 + CookieAssistant2.modes.sell_buildings_mode[CookieAssistant2.config.particular.sell.sell_mode[i_sellconf]].desc
                 + '</a>'
-                + '<label>Sell </label>'
+                + '<label>Target</label>'
                 + '<a class="option" ' + Game.clickStr + '="CookieAssistant2.config.particular.sell.target[' + i_sellconf + ']++; if(CookieAssistant2.config.particular.sell.target[' + i_sellconf + '] >= Object.keys(Game.Objects).length){CookieAssistant2.config.particular.sell.target[' + i_sellconf + '] = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
             if (Game.season == 'fools') {
                 str += Game.foolObjects[Game.ObjectsById[CookieAssistant2.config.particular.sell.target[i_sellconf]].dname].name
@@ -1244,18 +1250,18 @@ CookieAssistant2.launch = function () {
             }
             str += '</a>'
             if (CookieAssistant2.modes.sell_buildings_mode[CookieAssistant2.config.particular.sell.sell_mode[i_sellconf]].desc == "Set") {
-                str += '<label> For </label>'
+                str += '<label>Amount</label>'
                     + m.InputBox("CookieAssistant2_Amount_autoSellBuilding", 40, CookieAssistant2.config.particular.sell.amount[i_sellconf], "CookieAssistant2.config.particular.sell.amount[" + i_sellconf + "] = this.value;")
             }
             if (CookieAssistant2.modes.sell_buildings_mode[CookieAssistant2.config.particular.sell.sell_mode[i_sellconf]].desc == "Percentage") {
-                str += '<label> Percentage </label>'
+                str += '<label>Percentage</label>'
                     + m.InputBox("CookieAssistant2_Amount_autoSellBuilding", 40, CookieAssistant2.config.particular.sell.amount[i_sellconf], "if(this.value < 0){this.value = 0}; if(this.value > 100) {this.value = 100}; CookieAssistant2.config.particular.sell.amount[" + i_sellconf + "] = parseInt(this.value).toPrecision();")
             }
-            str += '<label>When </label>'
+            str += '<label>When</label>'
                 + '<a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.sell.activate_mode[' + i_sellconf + ']++; if(CookieAssistant2.config.particular.sell.activate_mode[' + i_sellconf + '] >= Object.keys(CookieAssistant2.modes.sell_buildings).length){CookieAssistant2.config.particular.sell.activate_mode[' + i_sellconf + '] = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
                 + CookieAssistant2.modes.sell_buildings[CookieAssistant2.config.particular.sell.activate_mode[i_sellconf]].desc
                 + '</a>'
-                + '<label>What to do after activation : </label>'
+                + '<label>Then</label>'
                 + '<a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.sell.after_mode[' + i_sellconf + ']++; if(CookieAssistant2.config.particular.sell.after_mode[' + i_sellconf + '] >= Object.keys(CookieAssistant2.modes.sell_buildings_after).length){CookieAssistant2.config.particular.sell.after_mode[' + i_sellconf + '] = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
                 + CookieAssistant2.modes.sell_buildings_after[CookieAssistant2.config.particular.sell.after_mode[i_sellconf]].desc
                 + '</a><br></li>';
@@ -1271,22 +1277,18 @@ CookieAssistant2.launch = function () {
             }
         }
 
-        str += "<br>"
-        str += m.Header('Special Assists');
-
-        //ChocolateEgg
-        str += '<div class="listing">' + m.ToggleButton(CookieAssistant2.config.flags, 'autoChocolateEgg', 'CookieAssistant2_autoChocolateEgg', 'Auto Buy ' + loc("[Upgrade name 227]Chocolate egg") + ' ON', 'AutoToggle ' + loc("[Upgrade name 227]Chocolate egg") + ' OFF', "CookieAssistant2.Toggle")
-            + '</div>';
-
         str += "<br />"
         str += m.Header('Misc');
         str += '<div class="listing">'
+            + m.ActionButton("Steam.openLink('https://steamcommunity.com/sharedfiles/filedetails/?id=2596469882');", 'Original Cookie Assistant')
             + m.ActionButton("CookieAssistant2.showAllIntervals = !CookieAssistant2.showAllIntervals; Game.UpdateMenu();", (CookieAssistant2.showAllIntervals ? 'Hide' : 'Show All') + ' Interval Settings')
             + m.ActionButton("CookieAssistant2.restoreDefaultConfig(2); CookieAssistant2.DoAction(); Game.UpdateMenu();", 'Restore Default')
             + m.ActionButton("CookieAssistant2.CheckUpdate();", 'Check Update')
-            + m.ActionButton("Steam.openLink('https://steamcommunity.com/sharedfiles/filedetails/?id=2596469882');", 'Get more information') //TODO: Change to new workshop id
-            + '<label>Version : ' + CookieAssistant2.version + '</label>'
-            + '</div>';
+            + m.ActionButton("Steam.openLink('https://steamcommunity.com/sharedfiles/filedetails/?id=3316971307');", 'Get more information')
+            + '</div>'
+        str += '<div class="listing">'
+            + '<label>Version: ' + CookieAssistant2.version + '</label>'
+            + '</div>'
 
         return str;
     }

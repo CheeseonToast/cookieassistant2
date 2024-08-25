@@ -6,7 +6,7 @@ if (typeof CCSE == 'undefined') {
 }
 
 CookieAssistant2.name = 'Cookie Assistant 2.0';
-CookieAssistant2.version = '0.8.3';
+CookieAssistant2.version = '0.9.0';
 CookieAssistant2.GameVersion = '2.052';
 
 
@@ -51,7 +51,7 @@ CookieAssistant2.launch = function () {
                         autoTrainDragon: 1000,
                         autoSetSpirits: 10000,
                         autoHarvestSugarlump: 60000,
-                        autoSellBuilding: 2500,
+                        autoSellBuilding: 500,
                         autoToggleGoldenSwitch: 500,
                         autoHireBrokers: 1000,
                     },

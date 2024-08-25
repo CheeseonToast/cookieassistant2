@@ -51,7 +51,7 @@ CookieAssistant2.launch = function () {
                         autoTrainDragon: 1000,
                         autoSetSpirits: 10000,
                         autoHarvestSugarlump: 60000,
-                        autoSellBuilding: 500,
+                        autoSellBuilding: 2500,
                         autoToggleGoldenSwitch: 500,
                         autoHireBrokers: 1000,
                     },
@@ -934,7 +934,7 @@ CookieAssistant2.launch = function () {
             // Sell Percentage
             if (sell_mode == 2) {
                 var buildings = parseInt(Game.Objects[objectName].amount);
-                Game.Objects[objectName].sell(parseInt(((amount/100)*buildings).toPrecision()));
+                Game.Objects[objectName].sell(parseInt(((amount / 100) * buildings).toPrecision()));
             }
             CookieAssistant2.config.particular.sell.isAfterSell[index] = 1;
             CookieAssistant2.isAfterSpellcast = false;
@@ -1067,12 +1067,12 @@ CookieAssistant2.launch = function () {
             + '<label></label><a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.bigCookie.isMute++; if(CookieAssistant2.config.particular.bigCookie.isMute >= 2){CookieAssistant2.config.particular.bigCookie.isMute = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
             + (CookieAssistant2.config.particular.bigCookie.isMute ? 'Mute Click SE' : 'Play Click SE')
             + '</a>'
-            if (CookieAssistant2.showAllIntervals) {
-                str += '<label>Click Interval(ms) :</label>'
+        if (CookieAssistant2.showAllIntervals) {
+            str += '<label>Click Interval(ms) :</label>'
                 + m.InputBox("CookieAssistant2_Interval_autoClickBigCookie", 40, CookieAssistant2.config.intervals.autoClickBigCookie, "CookieAssistant2.ChangeInterval('autoClickBigCookie', this.value)")
-            }
-            str += '<br />'
-                + '</div>';
+        }
+        str += '<br />'
+            + '</div>';
 
         //Golden Cookie click
         str += '<div class="listing">' + m.ToggleButton(CookieAssistant2.config.flags, 'autoClickGoldenCookie', 'CookieAssistant2_autoClickGoldenCookieButton', 'AutoClick ' + loc("Golden cookie") + ' ON', 'AutoClick ' + loc("Golden cookie") + ' OFF', "CookieAssistant2.Toggle")
@@ -1080,12 +1080,12 @@ CookieAssistant2.launch = function () {
             + '<a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.golden.mode++; if(CookieAssistant2.config.particular.golden.mode >= Object.keys(CookieAssistant2.modes.golden).length){CookieAssistant2.config.particular.golden.mode = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
             + CookieAssistant2.modes.golden[CookieAssistant2.config.particular.golden.mode].desc
             + '</a>'
-            if (CookieAssistant2.showAllIntervals) {
-                str += '<label>Click Interval(ms) :</label>'
+        if (CookieAssistant2.showAllIntervals) {
+            str += '<label>Click Interval(ms) :</label>'
                 + m.InputBox("CookieAssistant2_Interval_autoClickBigCookie", 40, CookieAssistant2.config.intervals.autoClickGoldenCookie, "CookieAssistant2.ChangeInterval('autoClickGoldenCookie', this.value)")
-            }
-            str += '<br />'
-                + '</div>';
+        }
+        str += '<br />'
+            + '</div>';
 
         //Destroy Wrinklers
         str += '<div class="listing">' + m.ToggleButton(CookieAssistant2.config.flags, 'autoClickWrinklers', 'CookieAssistant2_autoClickWrinklers', 'AutoClick ' + loc("wrinkler") + ' ON', 'AutoClick ' + loc("wrinkler") + ' OFF', "CookieAssistant2.Toggle")
@@ -1093,12 +1093,12 @@ CookieAssistant2.launch = function () {
             + '<a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.wrinkler.mode++; if(CookieAssistant2.config.particular.wrinkler.mode >= Object.keys(CookieAssistant2.modes.wrinkler).length){CookieAssistant2.config.particular.wrinkler.mode = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
             + CookieAssistant2.modes.wrinkler[CookieAssistant2.config.particular.wrinkler.mode].desc
             + '</a>'
-            if (CookieAssistant2.showAllIntervals) {
+        if (CookieAssistant2.showAllIntervals) {
             str += '<label>Click Interval(ms) :</label>'
-            + m.InputBox("CookieAssistant2_Interval_autoClickWrinklers", 40, CookieAssistant2.config.intervals.autoClickWrinklers, "CookieAssistant2.ChangeInterval('autoClickWrinklers', this.value)")
-            }
-            str += '<br />'
-                + '</div>';
+                + m.InputBox("CookieAssistant2_Interval_autoClickWrinklers", 40, CookieAssistant2.config.intervals.autoClickWrinklers, "CookieAssistant2.ChangeInterval('autoClickWrinklers', this.value)")
+        }
+        str += '<br />'
+            + '</div>';
 
         //Upgrade automatic purchase
         str += '<div class="listing">' + m.ToggleButton(CookieAssistant2.config.flags, 'autoBuyUpgrades', 'CookieAssistant2_autoBuyUpgrades', 'AutoBuy ' + loc("upgrade") + ' ON', 'AutoBuy ' + loc("upgrade") + ' OFF', "CookieAssistant2.Toggle")
@@ -1222,7 +1222,13 @@ CookieAssistant2.launch = function () {
         str += '<div class="listing">' + m.ToggleButton(CookieAssistant2.config.flags, 'autoSellBuilding', 'CookieAssistant2_autoSellBuilding', 'AutoSell Buildings ON', 'AutoSell Buildings OFF', "CookieAssistant2.Toggle");
         str += '<label>Click Interval(ms) :</label>'
             + m.InputBox("CookieAssistant2_Interval_autoSellBuilding", 40, CookieAssistant2.config.intervals.autoSellBuilding, "CookieAssistant2.ChangeInterval('autoSellBuilding', this.value)");
-        str += '<div class="listing"><ol style="list-style: inside;list-style-type: decimal;">';
+        str += '<br>'
+        str += '<a class="option" ' + Game.clickStr + '="CookieAssistant2.addSellConfig(); Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">Add Config</a>';
+        if (CookieAssistant2.config.particular.sell.isAfterSell.length > 0) {
+            str += '<a class="option" ' + Game.clickStr + '="CookieAssistant2.removeSellConfig(); Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">Remove Last</a>';
+        }
+        str += '<div class="listing">'
+            + '<ol style="list-style: inside;list-style-type: decimal;">';
         for (var i_sellconf = 0; i_sellconf < CookieAssistant2.config.particular.sell.isAfterSell.length; i_sellconf++) {
             str += '<li>'
                 + '<label>Mode</label>'
@@ -1231,20 +1237,20 @@ CookieAssistant2.launch = function () {
                 + '</a>'
                 + '<label>Sell </label>'
                 + '<a class="option" ' + Game.clickStr + '="CookieAssistant2.config.particular.sell.target[' + i_sellconf + ']++; if(CookieAssistant2.config.particular.sell.target[' + i_sellconf + '] >= Object.keys(Game.Objects).length){CookieAssistant2.config.particular.sell.target[' + i_sellconf + '] = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
-                if (Game.season == 'fools'){
-                    str += Game.foolObjects[Game.ObjectsById[CookieAssistant2.config.particular.sell.target[i_sellconf]].dname].name
-                } else {
-                    str += Game.ObjectsById[CookieAssistant2.config.particular.sell.target[i_sellconf]].dname
-                }
-                str += '</a>'
-                if (CookieAssistant2.modes.sell_buildings_mode[CookieAssistant2.config.particular.sell.sell_mode[i_sellconf]].desc == "Set") {
-                    str += '<label> For </label>'
+            if (Game.season == 'fools') {
+                str += Game.foolObjects[Game.ObjectsById[CookieAssistant2.config.particular.sell.target[i_sellconf]].dname].name
+            } else {
+                str += Game.ObjectsById[CookieAssistant2.config.particular.sell.target[i_sellconf]].dname
+            }
+            str += '</a>'
+            if (CookieAssistant2.modes.sell_buildings_mode[CookieAssistant2.config.particular.sell.sell_mode[i_sellconf]].desc == "Set") {
+                str += '<label> For </label>'
                     + m.InputBox("CookieAssistant2_Amount_autoSellBuilding", 40, CookieAssistant2.config.particular.sell.amount[i_sellconf], "CookieAssistant2.config.particular.sell.amount[" + i_sellconf + "] = this.value;")
-                }
-                if (CookieAssistant2.modes.sell_buildings_mode[CookieAssistant2.config.particular.sell.sell_mode[i_sellconf]].desc == "Percentage") {
-                    str += '<label> Percentage </label>'
+            }
+            if (CookieAssistant2.modes.sell_buildings_mode[CookieAssistant2.config.particular.sell.sell_mode[i_sellconf]].desc == "Percentage") {
+                str += '<label> Percentage </label>'
                     + m.InputBox("CookieAssistant2_Amount_autoSellBuilding", 40, CookieAssistant2.config.particular.sell.amount[i_sellconf], "if(this.value < 0){this.value = 0}; if(this.value > 100) {this.value = 100}; CookieAssistant2.config.particular.sell.amount[" + i_sellconf + "] = parseInt(this.value).toPrecision();")
-                }
+            }
             str += '<label>When </label>'
                 + '<a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.sell.activate_mode[' + i_sellconf + ']++; if(CookieAssistant2.config.particular.sell.activate_mode[' + i_sellconf + '] >= Object.keys(CookieAssistant2.modes.sell_buildings).length){CookieAssistant2.config.particular.sell.activate_mode[' + i_sellconf + '] = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
                 + CookieAssistant2.modes.sell_buildings[CookieAssistant2.config.particular.sell.activate_mode[i_sellconf]].desc
@@ -1252,14 +1258,11 @@ CookieAssistant2.launch = function () {
                 + '<label>What to do after activation : </label>'
                 + '<a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.sell.after_mode[' + i_sellconf + ']++; if(CookieAssistant2.config.particular.sell.after_mode[' + i_sellconf + '] >= Object.keys(CookieAssistant2.modes.sell_buildings_after).length){CookieAssistant2.config.particular.sell.after_mode[' + i_sellconf + '] = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
                 + CookieAssistant2.modes.sell_buildings_after[CookieAssistant2.config.particular.sell.after_mode[i_sellconf]].desc
-                + '</a><br /></li>';
+                + '</a><br></li>';
         }
         str += '</ol>';
-        str += '<a class="option" ' + Game.clickStr + '="CookieAssistant2.addSellConfig(); Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">Add Config</a>';
-        if (CookieAssistant2.config.particular.sell.isAfterSell.length > 0) {
-            str += '<a class="option" ' + Game.clickStr + '="CookieAssistant2.removeSellConfig(); Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">Remove Last</a>';
-        }
-        str += '</div></div>';
+        +'</div>';
+        +'</div>';
 
         if (CookieAssistant2.config.flags.autoSellBuilding) {
             var temple = Game.Objects['Temple'].minigame;
@@ -1268,7 +1271,7 @@ CookieAssistant2.launch = function () {
             }
         }
 
-        str += "<br />"
+        str += "<br>"
         str += m.Header('Special Assists');
 
         //ChocolateEgg
@@ -1358,7 +1361,7 @@ CookieAssistant2.launch = function () {
     CookieAssistant2.CheckUpdate = async function () {
         await fetch("https://api.github.com/repos/CheeseonToast/cookieassistant2/releases/latest").then(json => {
             json.json().then(result => {
-                if (result.tag_name == CookieAssistant2.version) {
+                if (result.tag_name === CookieAssistant2.version) {
                     Game.Notify(CookieAssistant2.name, `This is the latest version`, "", 3)
                 } else {
                     Game.Notify(CookieAssistant2.name, `<b style="color: #38e410"><br>There is an update!</b><br><a ${Game.clickStr}="Steam.openLink('${result.html_url}')" target="_brank">Download Here</a>`)

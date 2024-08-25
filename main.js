@@ -6,7 +6,7 @@ if (typeof CCSE == 'undefined') {
 }
 
 CookieAssistant2.name = 'Cookie Assistant 2.0';
-CookieAssistant2.version = '0.9.1';
+CookieAssistant2.version = '0.9.2';
 CookieAssistant2.GameVersion = '2.052';
 
 
@@ -845,7 +845,7 @@ CookieAssistant2.launch = function () {
             }
 
         Game.Notify('CookieAssistant loaded!', '', '', 1, 1);
-        CookieAssistant2.CheckUpdate();
+        // CookieAssistant2.CheckUpdate(); // TODO: Update version checking logic to be much better than it is now
     }
 
     CookieAssistant2.sellBuildings = function (index, target, amount, activate_mode, after_mode, sell_mode) {
@@ -1283,7 +1283,7 @@ CookieAssistant2.launch = function () {
             + m.ActionButton("Steam.openLink('https://steamcommunity.com/sharedfiles/filedetails/?id=2596469882');", 'Original Cookie Assistant')
             + m.ActionButton("CookieAssistant2.showAllIntervals = !CookieAssistant2.showAllIntervals; Game.UpdateMenu();", (CookieAssistant2.showAllIntervals ? 'Hide' : 'Show All') + ' Interval Settings')
             + m.ActionButton("CookieAssistant2.restoreDefaultConfig(2); CookieAssistant2.DoAction(); Game.UpdateMenu();", 'Restore Default')
-            + m.ActionButton("CookieAssistant2.CheckUpdate();", 'Check Update')
+            // + m.ActionButton("CookieAssistant2.CheckUpdate();", 'Check Update')
             + m.ActionButton("Steam.openLink('https://steamcommunity.com/sharedfiles/filedetails/?id=3316971307');", 'Get more information')
             + '</div>'
         str += '<div class="listing">'

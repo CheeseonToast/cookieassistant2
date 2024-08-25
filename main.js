@@ -845,7 +845,7 @@ CookieAssistant2.launch = function () {
             }
 
         Game.Notify('CookieAssistant loaded!', '', '', 1, 1);
-        // CookieAssistant2.CheckUpdate(); // TODO: Update version checking logic to be much better than it is now
+        CookieAssistant2.CheckUpdate(); // TODO: Update version checking logic to be much better than it is now
     }
 
     CookieAssistant2.sellBuildings = function (index, target, amount, activate_mode, after_mode, sell_mode) {
@@ -1064,8 +1064,8 @@ CookieAssistant2.launch = function () {
             + '<a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.bigCookie.mode++; if(CookieAssistant2.config.particular.bigCookie.mode >= Object.keys(CookieAssistant2.modes.bigCookie).length){CookieAssistant2.config.particular.bigCookie.mode = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
             + CookieAssistant2.modes.bigCookie[CookieAssistant2.config.particular.bigCookie.mode].desc
             + '</a>'
-            + '<label></label><a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.bigCookie.isMute++; if(CookieAssistant2.config.particular.bigCookie.isMute >= 2){CookieAssistant2.config.particular.bigCookie.isMute = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
-            + (CookieAssistant2.config.particular.bigCookie.isMute ? 'Mute Click SE' : 'Play Click SE')
+            + '<label>clicking sound</label><a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.bigCookie.isMute++; if(CookieAssistant2.config.particular.bigCookie.isMute >= 2){CookieAssistant2.config.particular.bigCookie.isMute = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
+            + (CookieAssistant2.config.particular.bigCookie.isMute ? 'Muted' : 'Enabled')
             + '</a>'
         if (CookieAssistant2.showAllIntervals) {
             str += '<label>Click Interval(ms) :</label>'
@@ -1283,7 +1283,7 @@ CookieAssistant2.launch = function () {
             + m.ActionButton("Steam.openLink('https://steamcommunity.com/sharedfiles/filedetails/?id=2596469882');", 'Original Cookie Assistant')
             + m.ActionButton("CookieAssistant2.showAllIntervals = !CookieAssistant2.showAllIntervals; Game.UpdateMenu();", (CookieAssistant2.showAllIntervals ? 'Hide' : 'Show All') + ' Interval Settings')
             + m.ActionButton("CookieAssistant2.restoreDefaultConfig(2); CookieAssistant2.DoAction(); Game.UpdateMenu();", 'Restore Default')
-            // + m.ActionButton("CookieAssistant2.CheckUpdate();", 'Check Update')
+            + m.ActionButton("CookieAssistant2.CheckUpdate();", 'Check Update')
             + m.ActionButton("Steam.openLink('https://steamcommunity.com/sharedfiles/filedetails/?id=3316971307');", 'Get more information')
             + '</div>'
         str += '<div class="listing">'
@@ -1360,13 +1360,45 @@ CookieAssistant2.launch = function () {
         CookieAssistant2.DoAction();
     }
 
+    CookieAssistant2.CheckVersion = function (version) {
+        var pattern = /(\d+).(\d+).(\d+)/;
+        var local_result = CookieAssistant2.version.match(pattern);
+        var online_result = version.match(pattern);
+        var local_major_version = local_result[1];
+        var local_minor_version = local_result[2];
+        var local_patch_version = local_result[3];
+        var online_major_version = online_result[1];
+        var online_minor_version = online_result[2];
+        var online_patch_version = online_result[3];
+
+        if (local_major_version == online_major_version && local_minor_version == online_minor_version && local_patch_version == online_patch_version) {
+            return true
+        } else {
+            if (local_major_version < online_major_version) {
+                return false
+            } else {
+                if (local_minor_version < online_minor_version) {
+                    return false
+                } else {
+                    if (local_patch_version < online_patch_version) {
+                        return false
+                    }
+                }
+            }
+        }
+    }
+
     CookieAssistant2.CheckUpdate = async function () {
         await fetch("https://api.github.com/repos/CheeseonToast/cookieassistant2/releases/latest").then(json => {
             json.json().then(result => {
-                if (result.tag_name === CookieAssistant2.version) {
+                if (CookieAssistant2.CheckVersion(result.tag_name)) {
                     Game.Notify(CookieAssistant2.name, `This is the latest version`, "", 3)
-                } else {
-                    Game.Notify(CookieAssistant2.name, `<b style="color: #38e410"><br>There is an update!</b><br><a ${Game.clickStr}="Steam.openLink('${result.html_url}')" target="_brank">Download Here</a>`)
+                }
+                // if (result.tag_name === CookieAssistant2.version) {
+                //     Game.Notify(CookieAssistant2.name, `This is the latest version`, "", 3)
+                // }
+                else {
+                    Game.Notify(CookieAssistant2.name, `<b style="color: #38e410"><br>There is an update!</b><br><a ${Game.clickStr}="Steam.openLink('${result.html_url}')" target="_brank">Download Here</a>`);
                     Game.UpdateMenu();
                 }
             })

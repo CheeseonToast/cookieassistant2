@@ -1392,7 +1392,7 @@ CookieAssistant2.launch = function () {
         await fetch("https://api.github.com/repos/CheeseonToast/cookieassistant2/releases/latest").then(json => {
             json.json().then(result => {
                 if (CookieAssistant2.CheckVersion(result.tag_name)) {
-                    Game.Notify(CookieAssistant2.name, `This is the latest version: <b style="color: #38e410">${CookieAssistant2.version}</b>`, "", 3)
+                    Game.Notify(CookieAssistant2.name, `This is the latest version: <b style="color: #38e410">${CookieAssistant2.version}</b>`);
                 } else {
                     Game.Notify(CookieAssistant2.name, `<b style="color: #38e410"><br>There is an update!</b><br><a ${Game.clickStr}="Steam.openLink('${result.html_url}')" target="_brank">Download Here</a>`);
                     Game.UpdateMenu();

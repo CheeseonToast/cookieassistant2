@@ -1,2 +1,0 @@
-copy /y main.js "E:\SteamLibrary\steamapps\common\Cookie Clicker\resources\app\mods\local\CookieAssistant2\"
-copy /y info.txt "E:\SteamLibrary\steamapps\common\Cookie Clicker\resources\app\mods\local\CookieAssistant2\"

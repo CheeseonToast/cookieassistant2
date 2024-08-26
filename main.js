@@ -482,8 +482,8 @@ CookieAssistant2.launch = function () {
                 autoSpellOnBuff: () => {
                     CookieAssistant2.intervalHandles.autoSpellOnBuff = setInterval(
                         () => {
-                            var buffCount = 0;
-                            for (var i in Game.buffs) {
+                            let buffCount = 0;
+                            for (let i in Game.buffs) {
                                 switch (Game.buffs[i].type.name) {
                                     case "frenzy":
                                     case "blood frenzy": //elder frenzy (x666)
@@ -500,9 +500,9 @@ CookieAssistant2.launch = function () {
                                         break;
                                 }
                             }
-                            var grimoire = Game.ObjectsById[7].minigame;
-                            var spell = grimoire.spells['hand of fate'];
-                            var cost;
+                            let grimoire = Game.ObjectsById[7].minigame;
+                            let spell = grimoire.spells['hand of fate'];
+                            let cost;
                             switch (CookieAssistant2.config.particular.spell.mode) {
                                 case 0: //Minimum MP required
                                     cost = Math.floor(spell.costMin + grimoire.magicM * spell.costPercent);
@@ -557,8 +557,8 @@ CookieAssistant2.launch = function () {
                 autoBuyUpgrades: () => {
                     CookieAssistant2.intervalHandles.autoBuyUpgrades = setInterval(
                         () => {
-                            for (var i in Game.UpgradesInStore) {
-                                var upgrade = Game.UpgradesInStore[i];
+                            for (let i in Game.UpgradesInStore) {
+                                let upgrade = Game.UpgradesInStore[i];
                                 //Ignore upgrades in the vault
                                 if (upgrade.isVaulted()) {
                                     continue;
@@ -588,11 +588,11 @@ CookieAssistant2.launch = function () {
                 autoSwitchSeason: () => {
                     CookieAssistant2.intervalHandles.autoSwitchSeason = setInterval(
                         () => {
-                            var winterSantaRate = Game.GetHowManySantaDrops() / Game.santaDrops.length;
-                            var winterReindeerRate = Game.GetHowManyReindeerDrops() / Game.reindeerDrops.length;
-                            var halloweenRate = Game.GetHowManyHalloweenDrops() / Game.halloweenDrops.length;
-                            var easterRate = Game.GetHowManyEggs() / Game.easterEggs.length;
-                            var valentinesRate = Game.GetHowManyHeartDrops() / Game.heartDrops.length;
+                            let winterSantaRate = Game.GetHowManySantaDrops() / Game.santaDrops.length;
+                            let winterReindeerRate = Game.GetHowManyReindeerDrops() / Game.reindeerDrops.length;
+                            let halloweenRate = Game.GetHowManyHalloweenDrops() / Game.halloweenDrops.length;
+                            let easterRate = Game.GetHowManyEggs() / Game.easterEggs.length;
+                            let valentinesRate = Game.GetHowManyHeartDrops() / Game.heartDrops.length;
 
                             if (Game.season === "") {
                                 CookieAssistant2.SwitchNextSeason();
@@ -645,10 +645,10 @@ CookieAssistant2.launch = function () {
                             if (Game.AscendTimer > 0 || Game.OnAscend) {
                                 return;
                             }
-                            var amountPerPurchase = CookieAssistant2.modes.buildings[CookieAssistant2.config.particular.buildings.mode].amount;
+                            let amountPerPurchase = CookieAssistant2.modes.buildings[CookieAssistant2.config.particular.buildings.mode].amount;
                             for (const objectName in Game.Objects) {
-                                var amount = Game.Objects[objectName].amount % amountPerPurchase === 0 ? amountPerPurchase : amountPerPurchase - Game.Objects[objectName].amount % amountPerPurchase;
-                                var isMaxDragon = Game.dragonLevel >= Game.dragonLevels.length - 1;
+                                let amount = Game.Objects[objectName].amount % amountPerPurchase === 0 ? amountPerPurchase : amountPerPurchase - Game.Objects[objectName].amount % amountPerPurchase;
+                                let isMaxDragon = Game.dragonLevel >= Game.dragonLevels.length - 1;
                                 //If automatic dragon training is on, automatic purchase of buildings will be restricted.
                                 if (!isMaxDragon && CookieAssistant2.config.flags.autoTrainDragon && Game.Objects[objectName].amount >= 350 - amountPerPurchase) {
                                     amount = 350 - Game.Objects[objectName].amount;
@@ -709,7 +709,7 @@ CookieAssistant2.launch = function () {
                             if (Game.Objects['Temple'].minigame === undefined || !Game.Objects['Temple'].minigameLoaded) {
                                 return;
                             }
-                            var pantheon = Game.Objects['Temple'].minigame;
+                            let pantheon = Game.Objects['Temple'].minigame;
                             if (pantheon.slot[0] === -1) {
                                 pantheon.dragGod(pantheon.godsById[CookieAssistant2.config.particular.spirits.slot1]);
                                 pantheon.hoverSlot(0);
@@ -739,7 +739,7 @@ CookieAssistant2.launch = function () {
                             if (!Game.canLumps()) {
                                 return;
                             }
-                            var age = Date.now() - Game.lumpT;
+                            let age = Date.now() - Game.lumpT;
                             if (age > Game.lumpRipeAge && age < Game.lumpOverripeAge) {
                                 Game.clickLump();
                             }
@@ -750,12 +750,12 @@ CookieAssistant2.launch = function () {
                 autoSellBuilding: () => {
                     CookieAssistant2.intervalHandles.autoSellBuilding = setInterval(
                         () => {
-                            for (var i = 0; i < CookieAssistant2.config.particular.sell.isAfterSell.length; i++) {
-                                var target = CookieAssistant2.config.particular.sell.target[i];
-                                var sell_amount = CookieAssistant2.config.particular.sell.amount[i];
-                                var activate_mode = CookieAssistant2.config.particular.sell.activate_mode[i];
-                                var after_mode = CookieAssistant2.config.particular.sell.after_mode[i];
-                                var sell_mode = CookieAssistant2.config.particular.sell.sell_mode[i];
+                            for (let i = 0; i < CookieAssistant2.config.particular.sell.isAfterSell.length; i++) {
+                                let target = CookieAssistant2.config.particular.sell.target[i];
+                                let sell_amount = CookieAssistant2.config.particular.sell.amount[i];
+                                let activate_mode = CookieAssistant2.config.particular.sell.activate_mode[i];
+                                let after_mode = CookieAssistant2.config.particular.sell.after_mode[i];
+                                let sell_mode = CookieAssistant2.config.particular.sell.sell_mode[i];
                                 CookieAssistant2.sellBuildings(i, target, sell_amount, activate_mode, after_mode, sell_mode);
                             }
                         },
@@ -842,8 +842,8 @@ CookieAssistant2.launch = function () {
     }
 
     CookieAssistant2.sellBuildings = function (index, target, sell_amount, activate_mode, after_mode, sell_mode) {
-        var objectName = Game.ObjectsById[target].name;
-        var amount = parseInt(sell_amount);
+        let objectName = Game.ObjectsById[target].name;
+        let amount = parseInt(sell_amount);
         if (amount <= 0) {
             return;
         }
@@ -855,14 +855,14 @@ CookieAssistant2.launch = function () {
             }
             if (after_mode === 1)//Spell cast and buy back
             {
-                var grimoire = Game.ObjectsById[7].minigame;
+                let grimoire = Game.ObjectsById[7].minigame;
                 if (grimoire === undefined) {
                     Game.Notify(CookieAssistant2.name, "You have not unlocked the Grimoire yet, so failed to spell cast.", "", 3);
                     CookieAssistant2.config.particular.sell.isAfterSell[index] = 0;
                     return false;
                 }
-                var spell = grimoire.spells['hand of fate'];
-                var cost = Math.floor(spell.costMin + grimoire.magicM * spell.costPercent);
+                let spell = grimoire.spells['hand of fate'];
+                let cost = Math.floor(spell.costMin + grimoire.magicM * spell.costPercent);
                 if (cost <= Math.floor(grimoire.magic)) {
                     grimoire.castSpell(spell);
                 }
@@ -880,9 +880,9 @@ CookieAssistant2.launch = function () {
         }
 
 
-        var buffCount = 0;
-        var clickBuffCount = 0;
-        for (var i in Game.buffs) {
+        let buffCount = 0;
+        let clickBuffCount = 0;
+        for (let i in Game.buffs) {
             switch (Game.buffs[i].type.name) {
                 case "dragonflight":
                 case "click frenzy":
@@ -903,13 +903,13 @@ CookieAssistant2.launch = function () {
             }
         }
 
-        var isMode0 = activate_mode === 0 && buffCount >= 1;
-        var isMode1 = activate_mode === 1 && buffCount >= 2;
-        var isMode2 = activate_mode === 2 && clickBuffCount >= 1;
-        var isMode3 = activate_mode === 3 && buffCount >= 2 && clickBuffCount >= 1;
-        var isMode4 = activate_mode === 4 && CookieAssistant2.isAfterSpellcast;
-        var isMode5 = activate_mode === 5;
-        var isMode6 = activate_mode === 6 && buffCount >= 3;
+        let isMode0 = activate_mode === 0 && buffCount >= 1;
+        let isMode1 = activate_mode === 1 && buffCount >= 2;
+        let isMode2 = activate_mode === 2 && clickBuffCount >= 1;
+        let isMode3 = activate_mode === 3 && buffCount >= 2 && clickBuffCount >= 1;
+        let isMode4 = activate_mode === 4 && CookieAssistant2.isAfterSpellcast;
+        let isMode5 = activate_mode === 5;
+        let isMode6 = activate_mode === 6 && buffCount >= 3;
         if (isMode0 || isMode1 || isMode2 || isMode3 || isMode4 || isMode5 || isMode6) {
             // Sell All
             if (sell_mode === 0) {
@@ -926,7 +926,7 @@ CookieAssistant2.launch = function () {
             }
             // Sell Percentage
             if (sell_mode === 2) {
-                var buildings = parseInt(Game.Objects[objectName].amount);
+                let buildings = parseInt(Game.Objects[objectName].amount);
                 Game.Objects[objectName].sell(parseInt(((amount / 100) * buildings).toPrecision()));
             }
             CookieAssistant2.config.particular.sell.isAfterSell[index] = 1;
@@ -1007,7 +1007,7 @@ CookieAssistant2.launch = function () {
     //Check the config
     //Prevent new items from becoming undefined during update and execution at 1ms cycle
     CookieAssistant2.CheckConfig = function () {
-        var defaultConfig = CookieAssistant2.defaultConfig();
+        let defaultConfig = CookieAssistant2.defaultConfig();
         for (const [key, value] of Object.entries(defaultConfig.flags)) {
             if (CookieAssistant2.config.flags[key] === undefined) {
                 CookieAssistant2.config.flags[key] = value;
@@ -1228,7 +1228,7 @@ CookieAssistant2.launch = function () {
         }
         str += '<div class="listing">'
             + '<ol style="list-style: inside;list-style-type: decimal;">';
-        for (var i = 0; i < CookieAssistant2.config.particular.sell.isAfterSell.length; i++) {
+        for (let i = 0; i < CookieAssistant2.config.particular.sell.isAfterSell.length; i++) {
             str += '<li>'
                 + '<label>Mode</label>'
                 + '<a class="option" ' + Game.clickStr + '=" CookieAssistant2.config.particular.sell.sell_mode[' + i + ']++; if(CookieAssistant2.config.particular.sell.sell_mode[' + i + '] >= Object.keys(CookieAssistant2.modes.sell_buildings_mode).length) {CookieAssistant2.config.particular.sell.sell_mode[' + i + '] = 0;} Game.UpdateMenu(); PlaySound(\'snd/tick.mp3\');">'
@@ -1259,12 +1259,12 @@ CookieAssistant2.launch = function () {
                 + CookieAssistant2.modes.sell_buildings_after[CookieAssistant2.config.particular.sell.after_mode[i]].desc
                 + '</a><br></li>';
         }
-        str += '</ol>';
-        +'</div>';
-        +'</div>';
+        str += '</ol>'
+        +'</div>'
+        +'</div>'
 
         if (CookieAssistant2.config.flags.autoSellBuilding) {
-            var temple = Game.Objects['Temple'].minigame;
+            let temple = Game.Objects['Temple'].minigame;
             if (temple === undefined || !Game.Objects['Temple'].minigameLoaded || !temple.slot.includes(2)) {
                 str += "<label><b style='color: #ff3705'>⚠️Godzamok is not set, so there may be no benefit from enabling this.</b></label><br />";
             }
@@ -1352,15 +1352,15 @@ CookieAssistant2.launch = function () {
     }
 
     CookieAssistant2.CheckVersion = function (version) {
-        var pattern = /(\d+).(\d+).(\d+)/;
-        var local_result = CookieAssistant2.version.match(pattern);
-        var online_result = version.match(pattern);
-        var local_major_version = local_result[1];
-        var local_minor_version = local_result[2];
-        var local_patch_version = local_result[3];
-        var online_major_version = online_result[1];
-        var online_minor_version = online_result[2];
-        var online_patch_version = online_result[3];
+        let pattern = /(\d+).(\d+).(\d+)/;
+        let local_result = CookieAssistant2.version.match(pattern);
+        let online_result = version.match(pattern);
+        let local_major_version = local_result[1];
+        let local_minor_version = local_result[2];
+        let local_patch_version = local_result[3];
+        let online_major_version = online_result[1];
+        let online_minor_version = online_result[2];
+        let online_patch_version = online_result[3];
 
         if (local_major_version === online_major_version && local_minor_version === online_minor_version && local_patch_version === online_patch_version) {
             return true

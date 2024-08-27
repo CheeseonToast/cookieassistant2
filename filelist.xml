@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<contentpackage name="Cookie Assistant 2.0" path="filelist.xml" corepackage="false" gameversion="0.9.4">
+    <main.js file="main.js" />
+    <info.txt file="info.txt" />
+    <thumbnail.png files="thumbnail.png" />
+</contentpackage>

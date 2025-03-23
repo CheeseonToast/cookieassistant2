@@ -4,7 +4,7 @@
  "Author": "CheeseonToast",
  "Description": "Assist tools for CookieClicker: Steam edition. Originally created by Hitsub, updated by CheeseonToast",
  "ModVersion": 0.9,
- "GameVersion": 2.052,
+ "GameVersion": 2.053,
  "Date": "23/08/2024",
  "Dependencies": [],
  "Disabled": 1,
